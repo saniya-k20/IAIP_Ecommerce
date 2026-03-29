@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUMIÈRE — Curated Living</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Nunito:wght@300;400;500;600;700&family=Nunito+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blush:     #fce8f0;
+  --blush2:    #f9d4e4;
+  --rose:      #f4a7c3;
+  --rose-deep: #e07aa0;
+  --lavender:  #ede4f6;
+  --lavender2: #d8c8ef;
+  --lav-deep:  #9b7dcc;
+  --mint:      #d8f2ec;
+  --mint-deep: #4caf90;
+  --peach:     #ffe5d4;
+  --peach2:    #ffcba8;
+  --peach-deep:#e8855a;
+  --white:     #fffcfe;
+  --ink:       #3d2c3e;
+  --ink2:      #5a4060;
+  --muted:     #9a7a9e;
+  --border:    rgba(180,120,170,0.15);
+  --border2:   rgba(180,120,170,0.08);
+  --shadow:    0 4px 30px rgba(180,100,160,0.12);
+  --shadow-lg: 0 16px 60px rgba(180,100,160,0.18);
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: 'Nunito Sans', sans-serif; background: var(--blush); color: var(--ink); overflow-x: hidden; line-height: 1.6; }
+img { display: block; max-width: 100%; object-fit: cover; }
+a { text-decoration: none; color: inherit; }
+button { border: none; background: none; cursor: pointer; font-family: inherit; }
+ul { list-style: none; }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--blush); }
+::-webkit-scrollbar-thumb { background: var(--rose); border-radius: 99px; }
+
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    radial-gradient(circle at 15% 25%, rgba(237,228,246,0.6) 0%, transparent 40%),
+    radial-gradient(circle at 85% 70%, rgba(252,232,240,0.7) 0%, transparent 38%),
+    radial-gradient(circle at 50% 90%, rgba(216,242,236,0.4) 0%, transparent 30%);
+  pointer-events: none; z-index: 0;
+}
+
+/* ANNOUNCE */
+.announce {
+  background: linear-gradient(90deg, var(--rose-deep), var(--lav-deep), var(--rose-deep));
+  background-size: 200% 100%;
+  animation: shimmer 4s linear infinite;
+  color: #fff; text-align: center; padding: 0.6rem 1rem;
+  font-family: 'Nunito', sans-serif; font-size: 0.8rem;
+  letter-spacing: 0.08em; font-weight: 600; position: relative; z-index: 10;
+}
+@keyframes shimmer { 0%{background-position:0% 50%} 100%{background-position:200% 50%} }
+.announce span { opacity: 0.5; margin: 0 0.5rem; }
+
+/* NAVBAR */
+nav {
+  position: sticky; top: 0; z-index: 500;
+  background: rgba(255,252,254,0.88); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 4rem;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 70px;
+}
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem; font-weight: 700; letter-spacing: 0.06em; color: var(--ink);
+}
+.nav-logo em { color: var(--rose-deep); font-style: italic; }
+.nav-center { display: flex; gap: 2.2rem; }
+.nav-center a {
+  font-family: 'Nunito', sans-serif; font-size: 0.82rem; font-weight: 600;
+  letter-spacing: 0.05em; color: var(--muted); position: relative; transition: color 0.2s;
+}
+.nav-center a::after {
+  content: ''; position: absolute; bottom: -4px; left: 0;
+  width: 0; height: 2px; background: var(--rose); border-radius: 99px; transition: width 0.3s;
+}
+.nav-center a:hover { color: var(--ink); }
+.nav-center a:hover::after { width: 100%; }
+.nav-right { display: flex; align-items: center; gap: 1.2rem; }
+.nav-icon-btn {
+  display: flex; align-items: center; gap: 0.35rem;
+  font-family: 'Nunito', sans-serif; font-size: 0.78rem; font-weight: 600;
+  color: var(--muted); transition: color 0.2s; cursor: pointer; background: none; border: none;
+}
+.nav-icon-btn:hover { color: var(--rose-deep); }
+.cart-count {
+  background: var(--rose-deep); color: #fff;
+  width: 18px; height: 18px; border-radius: 50%;
+  font-size: 0.62rem; display: flex; align-items: center; justify-content: center; font-weight: 700;
+}
+.nav-cta {
+  background: linear-gradient(135deg, var(--rose), var(--lav-deep));
+  color: #fff; padding: 0.6rem 1.5rem; border-radius: 99px;
+  font-family: 'Nunito', sans-serif; font-size: 0.8rem; font-weight: 700;
+  transition: opacity 0.2s, transform 0.2s; display: inline-block; cursor: pointer;
+}
+.nav-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+.mobile-menu-btn { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+.mobile-menu-btn span { display: block; width: 22px; height: 2px; background: var(--ink); border-radius: 99px; }
+
+/* HERO */
+.hero {
+  display: grid; grid-template-columns: 1fr 1fr;
+  min-height: calc(100vh - 102px);
+  overflow: hidden; position: relative; z-index: 1;
+}
+.hero-left {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 5rem 4rem; background: transparent;
+}
+.hero-eyebrow {
+  font-family: 'Nunito', sans-serif; font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--rose-deep);
+  margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem;
+}
+.hero-eyebrow::before { content: '✿'; }
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.8rem, 5vw, 4.8rem);
+  font-weight: 700; line-height: 1.1; color: var(--ink); margin-bottom: 1.5rem;
+}
+.hero-title em { font-style: italic; color: var(--rose-deep); }
+.hero-title .aw { color: var(--lav-deep); }
+.hero-desc { font-size: 1rem; color: var(--muted); max-width: 420px; line-height: 1.85; margin-bottom: 2.5rem; }
+.hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+.btn-primary {
+  background: linear-gradient(135deg, var(--rose-deep), var(--lav-deep));
+  color: #fff; padding: 0.9rem 2.2rem; border-radius: 99px;
+  font-family: 'Nunito', sans-serif; font-size: 0.88rem; font-weight: 700;
+  transition: all 0.25s; display: inline-block; letter-spacing: 0.04em;
+  box-shadow: 0 4px 20px rgba(224,122,160,0.35);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(224,122,160,0.45); }
+.btn-secondary {
+  border: 2px solid var(--rose); color: var(--rose-deep);
+  padding: 0.9rem 2.2rem; border-radius: 99px;
+  font-family: 'Nunito', sans-serif; font-size: 0.88rem; font-weight: 700;
+  transition: all 0.25s; display: inline-block;
+}
+.btn-secondary:hover { background: var(--rose); color: #fff; }
+.hero-trust {
+  display: flex; gap: 2rem; margin-top: 3rem;
+  padding-top: 2rem; border-top: 1px solid var(--border);
+}
+.trust-item { text-align: center; }
+.trust-num { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--rose-deep); line-height: 1; }
+.trust-label { font-size: 0.72rem; color: var(--muted); margin-top: 0.2rem; font-weight: 500; }
+.hero-right { position: relative; overflow: hidden; background: linear-gradient(150deg, var(--lavender), var(--blush2)); }
+.hero-img-wrap { width: 100%; height: 100%; }
+.hero-img-wrap img { width: 100%; height: 100%; min-height: 500px; object-position: center top; }
+.hero-tag-float {
+  position: absolute; top: 2rem; right: 2rem;
+  background: white; color: var(--rose-deep);
+  padding: 0.55rem 1.1rem; border-radius: 99px;
+  font-family: 'Nunito', sans-serif; font-size: 0.72rem; font-weight: 700;
+  box-shadow: var(--shadow); letter-spacing: 0.05em;
+  animation: floatTag 3s ease-in-out infinite; border: 2px solid var(--blush2);
+}
+@keyframes floatTag { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+.hero-badge-float {
+  position: absolute; bottom: 2.5rem; left: -0.5rem;
+  background: white; padding: 1rem 1.5rem;
+  box-shadow: var(--shadow-lg); border-radius: 16px;
+  min-width: 185px; border: 1px solid var(--border);
+}
+.hbf-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.hbf-value { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 600; color: var(--ink); margin-top: 0.2rem; }
+
+/* SECTION COMMONS */
+.sec-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2.5rem; }
+.sec-eyebrow {
+  font-family: 'Nunito', sans-serif; font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--rose-deep);
+  margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;
+}
+.sec-eyebrow::before { content: '♡'; }
+.sec-title { font-family: 'Playfair Display', serif; font-size: clamp(1.7rem, 3vw, 2.5rem); font-weight: 600; line-height: 1.2; color: var(--ink); }
+.sec-title em { font-style: italic; color: var(--rose-deep); }
+.sec-link {
+  font-family: 'Nunito', sans-serif; font-size: 0.8rem; font-weight: 700;
+  color: var(--lav-deep); border-bottom: 2px solid var(--lavender2);
+  padding-bottom: 2px; transition: color 0.2s, border-color 0.2s; white-space: nowrap;
+}
+.sec-link:hover { color: var(--rose-deep); border-color: var(--rose); }
+
+/* CATEGORIES */
+.categories { padding: 5rem 4rem; background: var(--white); position: relative; z-index: 1; }
+.cat-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 14px; }
+.cat-card {
+  position: relative; overflow: hidden; cursor: pointer;
+  border-radius: 22px; box-shadow: 0 4px 20px rgba(180,100,160,0.1);
+  transition: transform 0.35s, box-shadow 0.35s;
+}
+.cat-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(180,100,160,0.22); }
+.cat-card-inner { position: relative; height: 100%; min-height: 300px; overflow: hidden; border-radius: 22px; }
+.cat-card-inner img { width: 100%; height: 100%; min-height: 300px; transition: transform 0.6s ease; }
+.cat-card:hover .cat-card-inner img { transform: scale(1.07); }
+.cat-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(61,44,62,0.72) 0%, rgba(61,44,62,0.1) 50%, transparent 100%);
+  border-radius: 22px;
+}
+.cat-body { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.6rem; color: #fff; }
+.cat-name { font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 600; margin-bottom: 0.3rem; }
+.cat-count { font-family: 'Nunito', sans-serif; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; opacity: 0.8; }
+.cat-pill {
+  position: absolute; top: 1rem; left: 1rem;
+  background: rgba(255,255,255,0.9); color: var(--ink);
+  padding: 0.3rem 0.85rem; border-radius: 99px;
+  font-family: 'Nunito', sans-serif; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em;
+  opacity: 0; transform: translateY(-4px); transition: all 0.3s;
+}
+.cat-card:hover .cat-pill { opacity: 1; transform: translateY(0); }
+
+/* PRODUCTS */
+.products { padding: 5rem 4rem; background: var(--blush); position: relative; z-index: 1; }
+.product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+.product-card { position: relative; cursor: pointer; }
+.product-img {
+  aspect-ratio: 3/4; background: var(--white);
+  position: relative; overflow: hidden; margin-bottom: 1rem;
+  border-radius: 20px; box-shadow: 0 4px 20px rgba(180,100,160,0.1);
+}
+.product-img img { width: 100%; height: 100%; transition: transform 0.5s ease; }
+.product-card:hover .product-img img { transform: scale(1.06); }
+.product-badge {
+  position: absolute; top: 0.9rem; left: 0.9rem; z-index: 2;
+  font-family: 'Nunito', sans-serif; font-size: 0.65rem; font-weight: 700;
+  letter-spacing: 0.08em; padding: 0.3rem 0.85rem; border-radius: 99px;
+}
+.badge-new  { background: var(--lav-deep); color: #fff; }
+.badge-sale { background: var(--rose-deep); color: #fff; }
+.badge-hot  { background: var(--peach-deep); color: #fff; }
+.product-actions {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  display: flex; gap: 6px; padding: 10px;
+  transform: translateY(100%); transition: transform 0.35s ease;
+  background: linear-gradient(to top, rgba(255,255,255,0.95) 60%, transparent);
+  border-radius: 0 0 20px 20px;
+}
+.product-card:hover .product-actions { transform: translateY(0); }
+.pa-btn {
+  flex: 1; padding: 0.72rem 0.5rem; border-radius: 99px;
+  font-family: 'Nunito', sans-serif; font-size: 0.72rem; font-weight: 700; transition: all 0.2s;
+}
+.pa-cart {
+  background: linear-gradient(135deg, var(--rose-deep), var(--lav-deep));
+  color: #fff; box-shadow: 0 3px 12px rgba(224,122,160,0.4);
+}
+.pa-cart:hover { opacity: 0.9; }
+.pa-wish { background: white; color: var(--rose-deep); width: 42px; flex: none; font-size: 1rem; border: 2px solid var(--blush2); }
+.pa-wish:hover { background: var(--blush); }
+.product-name { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 0.2rem; }
+.product-sub { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.4rem; font-weight: 500; }
+.product-price { display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap; }
+.price-current { font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 700; color: var(--rose-deep); }
+.price-old { font-size: 0.82rem; color: var(--muted); text-decoration: line-through; }
+.price-save { font-family: 'Nunito', sans-serif; font-size: 0.68rem; font-weight: 700; color: var(--mint-deep); }
+.product-stars { display: flex; gap: 2px; margin-bottom: 0.3rem; }
+.star { font-size: 0.72rem; color: var(--peach-deep); }
+
+/* PROMO */
+.promo { margin: 0 4rem; border-radius: 28px; overflow: hidden; position: relative; z-index: 1; }
+.promo-inner {
+  display: grid; grid-template-columns: 1fr 1fr; min-height: 360px;
+  background: linear-gradient(135deg, var(--ink) 0%, #5a2d6a 100%);
+}
+.promo-text { padding: 4rem; display: flex; flex-direction: column; justify-content: center; z-index: 2; }
+.promo-eyebrow { font-family: 'Nunito', sans-serif; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--rose); margin-bottom: 1rem; }
+.promo-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 700; line-height: 1.15; margin-bottom: 1.4rem; color: white; }
+.promo-title strong { color: var(--peach2); }
+.promo-desc { font-size: 0.95rem; color: rgba(255,255,255,0.6); margin-bottom: 2rem; max-width: 360px; line-height: 1.8; }
+.btn-peach {
+  background: linear-gradient(135deg, var(--peach-deep), var(--rose));
+  color: #fff; padding: 0.9rem 2.2rem; border-radius: 99px;
+  font-family: 'Nunito', sans-serif; font-size: 0.86rem; font-weight: 700;
+  transition: all 0.25s; display: inline-block;
+  box-shadow: 0 4px 20px rgba(232,133,90,0.4);
+}
+.btn-peach:hover { opacity: 0.9; transform: translateY(-2px); }
+.promo-visual {
+  position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.promo-pattern {
+  position: absolute; inset: 0; opacity: 0.05;
+  background-image: repeating-linear-gradient(45deg, var(--rose) 0, var(--rose) 1px, transparent 0, transparent 50%);
+  background-size: 16px 16px;
+}
+.promo-countdown { text-align: center; position: relative; z-index: 2; }
+.countdown-label { font-family: 'Nunito', sans-serif; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--rose); margin-bottom: 1.5rem; }
+.countdown-grid { display: flex; gap: 1rem; justify-content: center; }
+.cd-box { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); padding: 1rem 1.2rem; border-radius: 16px; text-align: center; min-width: 70px; }
+.cd-num { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; color: white; line-height: 1; }
+.cd-unit { font-family: 'Nunito', sans-serif; font-size: 0.6rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-top: 0.3rem; }
+
+/* TRENDING */
+.trending { padding: 5rem 4rem; background: var(--lavender); position: relative; z-index: 1; }
+.trending-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+.trend-card {
+  display: grid; grid-template-columns: 88px 1fr; gap: 1rem; align-items: center;
+  padding: 1rem; border: 1.5px solid var(--lavender2); border-radius: 16px;
+  background: white; transition: all 0.25s; cursor: pointer;
+}
+.trend-card:hover { border-color: var(--lav-deep); box-shadow: var(--shadow); transform: translateY(-2px); }
+.trend-img { width: 88px; height: 88px; border-radius: 12px; overflow: hidden; flex-shrink: 0; background: var(--lavender); }
+.trend-img img { width: 100%; height: 100%; }
+.trend-rank { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; color: var(--lavender2); line-height: 1; margin-bottom: 0.25rem; }
+.trend-name { font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--ink); margin-bottom: 0.2rem; }
+.trend-cat { font-size: 0.72rem; color: var(--muted); margin-bottom: 0.35rem; font-weight: 500; }
+.trend-price { font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--rose-deep); }
+
+/* PERKS */
+.perks {
+  padding: 3.5rem 4rem;
+  background: linear-gradient(135deg, var(--mint) 0%, var(--lavender) 100%);
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  position: relative; z-index: 1;
+}
+.perks-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+.perk { text-align: center; padding: 1.5rem 1.5rem; border-right: 1px solid var(--border); }
+.perk:last-child { border-right: none; }
+.perk-icon { font-size: 1.8rem; margin-bottom: 0.75rem; display: block; }
+.perk-title { font-family: 'Nunito', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--ink); margin-bottom: 0.3rem; }
+.perk-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+
+/* TESTIMONIALS */
+.testimonials { padding: 5rem 4rem; background: var(--white); position: relative; z-index: 1; }
+.testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+.testi-card {
+  background: var(--blush); border: 1.5px solid var(--blush2); border-radius: 20px;
+  padding: 1.8rem; transition: transform 0.25s, box-shadow 0.25s;
+}
+.testi-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.testi-stars { color: var(--peach-deep); font-size: 0.9rem; margin-bottom: 1rem; letter-spacing: 2px; }
+.testi-text { font-size: 0.92rem; color: var(--ink2); line-height: 1.8; margin-bottom: 1.4rem; font-style: italic; }
+.testi-author { display: flex; align-items: center; gap: 0.8rem; }
+.testi-avatar {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--rose), var(--lavender2));
+  display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;
+}
+.testi-name { font-family: 'Nunito', sans-serif; font-size: 0.88rem; font-weight: 700; color: var(--ink); }
+.testi-loc { font-size: 0.75rem; color: var(--muted); margin-top: 0.1rem; }
+
+/* NEWSLETTER */
+.newsletter {
+  padding: 5rem 4rem; text-align: center;
+  background: linear-gradient(135deg, var(--blush2) 0%, var(--lavender) 100%);
+  position: relative; z-index: 1;
+}
+.newsletter-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; color: var(--ink); margin-bottom: 1rem; }
+.newsletter-title strong { color: var(--rose-deep); }
+.newsletter-sub { font-size: 1rem; color: var(--muted); margin-bottom: 2.5rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+.newsletter-form { display: flex; max-width: 480px; margin: 0 auto; border-radius: 99px; overflow: hidden; box-shadow: 0 8px 30px rgba(180,100,160,0.2); }
+.newsletter-input { flex: 1; padding: 1rem 1.5rem; border: none; outline: none; font-family: 'Nunito Sans', sans-serif; font-size: 0.92rem; background: white; color: var(--ink); }
+.newsletter-input::placeholder { color: var(--muted); }
+.newsletter-btn { background: linear-gradient(135deg, var(--rose-deep), var(--lav-deep)); color: #fff; padding: 1rem 2rem; border: none; cursor: pointer; font-family: 'Nunito', sans-serif; font-size: 0.85rem; font-weight: 700; white-space: nowrap; transition: opacity 0.2s; }
+.newsletter-btn:hover { opacity: 0.9; }
+
+/* FOOTER */
+footer { background: var(--ink); color: rgba(255,255,255,0.7); padding: 4rem 4rem 2rem; position: relative; z-index: 1; }
+.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.footer-brand .nav-logo { color: white; margin-bottom: 1rem; display: block; }
+.footer-brand .nav-logo em { color: var(--rose); }
+.footer-brand p { font-size: 0.85rem; line-height: 1.8; color: rgba(255,255,255,0.45); max-width: 280px; }
+.footer-col h4 { font-family: 'Nunito', sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: white; margin-bottom: 1.2rem; }
+.footer-col ul { display: flex; flex-direction: column; gap: 0.7rem; }
+.footer-col a { font-size: 0.85rem; color: rgba(255,255,255,0.45); transition: color 0.2s; }
+.footer-col a:hover { color: var(--rose); }
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+.footer-copy { font-size: 0.8rem; color: rgba(255,255,255,0.3); }
+.footer-pay { display: flex; gap: 0.5rem; }
+.pay-badge { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.5); padding: 0.3rem 0.8rem; border-radius: 6px; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.06em; }
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 2rem; right: 2rem; z-index: 2000;
+  background: var(--ink); color: white; padding: 1rem 1.5rem; border-radius: 16px;
+  box-shadow: var(--shadow-lg); font-family: 'Nunito', sans-serif; font-size: 0.85rem; font-weight: 600;
+  display: flex; align-items: center; gap: 0.8rem;
+  transform: translateY(80px); opacity: 0; transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
+  max-width: 320px; border-left: 4px solid var(--rose);
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* MODAL */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(61,44,62,0.5); backdrop-filter: blur(6px);
+  display: none; align-items: center; justify-content: center; padding: 1rem;
+}
+.modal-overlay.open { display: flex; }
+.modal { background: var(--white); border-radius: 28px; width: 100%; max-width: 420px; box-shadow: 0 30px 80px rgba(61,44,62,0.3); overflow: hidden; animation: modalIn 0.35s cubic-bezier(0.16,1,0.3,1); }
+@keyframes modalIn { from{opacity:0;transform:translateY(20px) scale(0.97)} to{opacity:1;transform:none} }
+.modal-header { padding: 2rem 2rem 1.5rem; text-align: center; position: relative; background: linear-gradient(135deg, var(--blush), var(--lavender)); }
+.modal-close { position: absolute; top: 1rem; right: 1rem; font-size: 1.1rem; color: var(--muted); transition: color 0.2s; }
+.modal-close:hover { color: var(--ink); }
+.modal-logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: var(--ink); }
+.modal-logo em { color: var(--rose-deep); font-style: italic; }
+.modal-subtitle { font-size: 0.8rem; color: var(--muted); margin-top: 0.25rem; }
+.modal-tabs { display: flex; border-bottom: 1px solid var(--border); }
+.modal-tab { flex: 1; padding: 1rem; font-family: 'Nunito', sans-serif; font-size: 0.85rem; font-weight: 600; color: var(--muted); border-bottom: 2px solid transparent; transition: all 0.2s; margin-bottom: -1px; }
+.modal-tab.active { color: var(--rose-deep); border-bottom-color: var(--rose-deep); }
+.modal-body { padding: 1.5rem 2rem 2rem; }
+.modal-form { display: none; }
+.modal-form.active { display: block; }
+.form-group { margin-bottom: 1rem; }
+.form-label { font-family: 'Nunito', sans-serif; font-size: 0.78rem; font-weight: 700; color: var(--ink2); display: block; margin-bottom: 0.4rem; letter-spacing: 0.04em; }
+.form-input { width: 100%; padding: 0.8rem 1rem; border: 1.5px solid var(--border); border-radius: 12px; font-family: 'Nunito Sans', sans-serif; font-size: 0.9rem; color: var(--ink); outline: none; transition: border-color 0.2s, box-shadow 0.2s; background: var(--blush); }
+.form-input:focus { border-color: var(--rose); box-shadow: 0 0 0 3px rgba(244,167,195,0.2); }
+.form-submit { width: 100%; padding: 0.9rem; background: linear-gradient(135deg, var(--rose-deep), var(--lav-deep)); color: #fff; border: none; border-radius: 99px; cursor: pointer; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700; margin-top: 0.5rem; transition: opacity 0.2s, transform 0.2s; }
+.form-submit:hover { opacity: 0.9; transform: translateY(-1px); }
+.modal-divider { text-align: center; font-size: 0.78rem; color: var(--muted); margin: 1.2rem 0; position: relative; }
+.modal-divider::before,.modal-divider::after { content:''; position:absolute; top:50%; width:40%; height:1px; background:var(--border); }
+.modal-divider::before{left:0} .modal-divider::after{right:0}
+.social-login { display: flex; gap: 0.8rem; }
+.soc-login-btn { flex: 1; padding: 0.75rem; border: 1.5px solid var(--border); border-radius: 12px; font-family: 'Nunito', sans-serif; font-size: 0.82rem; font-weight: 600; color: var(--ink2); background: white; transition: all 0.2s; }
+.soc-login-btn:hover { border-color: var(--rose); background: var(--blush); }
+
+/* MOBILE NAV */
+.mobile-nav { position: fixed; inset: 0; z-index: 900; pointer-events: none; }
+.mobile-nav.open { pointer-events: all; }
+.mobile-nav-overlay { position: absolute; inset: 0; background: rgba(61,44,62,0.4); opacity: 0; transition: opacity 0.3s; }
+.mobile-nav.open .mobile-nav-overlay { opacity: 1; }
+.mobile-nav-drawer { position: absolute; top: 0; left: 0; bottom: 0; width: 280px; background: var(--white); padding: 2rem 1.5rem; transform: translateX(-100%); transition: transform 0.35s cubic-bezier(0.16,1,0.3,1); display: flex; flex-direction: column; gap: 0.3rem; }
+.mobile-nav.open .mobile-nav-drawer { transform: translateX(0); }
+.mobile-nav-link { display: block; padding: 0.9rem 0.5rem; font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 600; color: var(--ink2); border-bottom: 1px solid var(--border); transition: color 0.2s; }
+.mobile-nav-link:hover { color: var(--rose-deep); }
+
+/* REVEAL */
+.reveal { opacity: 1; transform: none; }
+.reveal.will-animate { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.in { opacity: 1; transform: none; }
+.rd1{transition-delay:.08s} .rd2{transition-delay:.16s} .rd3{transition-delay:.24s} .rd4{transition-delay:.32s}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .product-grid{grid-template-columns:repeat(2,1fr);}
+  .trending-grid{grid-template-columns:repeat(2,1fr);}
+  .cat-grid{grid-template-columns:1fr 1fr;}
+  .cat-grid .cat-card:first-child{grid-column:span 2;}
+  .footer-top{grid-template-columns:1fr 1fr;gap:2rem;}
+}
+@media(max-width:768px){
+  nav{padding:0 1.2rem;}
+  .nav-center,.nav-cta{display:none;}
+  .mobile-menu-btn{display:flex;}
+  .hero{grid-template-columns:1fr;}
+  .hero-right{min-height:340px;}
+  .hero-left{padding:3.5rem 1.5rem 3rem;}
+  .hero-badge-float{left:1rem;}
+  .categories,.products,.trending,.testimonials,.newsletter,.perks,footer{padding-left:1.2rem;padding-right:1.2rem;}
+  .promo{margin:0;border-radius:0;}
+  .promo-inner{grid-template-columns:1fr;}
+  .promo-visual{min-height:200px;}
+  .cat-grid{grid-template-columns:1fr;}
+  .cat-grid .cat-card:first-child{grid-column:span 1;}
+  .product-grid{grid-template-columns:repeat(2,1fr);gap:1rem;}
+  .trending-grid{grid-template-columns:1fr;}
+  .perks-grid{grid-template-columns:1fr 1fr;}
+  .perk:nth-child(2){border-right:none;}
+  .testi-grid{grid-template-columns:1fr;}
+  .footer-top{grid-template-columns:1fr;}
+  .footer-bottom{flex-direction:column;gap:1rem;text-align:center;}
+  .hero-trust{flex-wrap:wrap;gap:1.5rem;}
+  .newsletter-form{flex-direction:column;border-radius:16px;}
+  .newsletter-btn{width:100%;}
+  .sec-header{flex-direction:column;align-items:flex-start;gap:0.5rem;}
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"><span>🛒</span><span id="toast-msg">Added to cart!</span></div>
+
+<!-- AUTH MODAL -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal">
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-logo">LUMI<em>È</em>RE</div>
+      <div class="modal-subtitle">Curated Living ✿</div>
+    </div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" onclick="switchTab('login',this)">Sign In</button>
+      <button class="modal-tab" onclick="switchTab('register',this)">Create Account</button>
+    </div>
+    <div class="modal-body">
+      <form class="modal-form active" id="loginForm" onsubmit="handleAuth(event,'Welcome back! 🌸')">
+        <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" type="email" placeholder="you@example.com" required></div>
+        <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" placeholder="••••••••" required></div>
+        <button type="submit" class="form-submit">Sign In</button>
+        <div class="modal-divider">or continue with</div>
+        <div class="social-login">
+          <button type="button" class="soc-login-btn">🌐 Google</button>
+          <button type="button" class="soc-login-btn">🍎 Apple</button>
+        </div>
+      </form>
+      <form class="modal-form" id="registerForm" onsubmit="handleAuth(event,'Account created! Welcome 🎀')">
+        <div class="form-group"><label class="form-label">Full Name</label><input class="form-input" type="text" placeholder="Jane Smith" required></div>
+        <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" type="email" placeholder="you@example.com" required></div>
+        <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" placeholder="Min. 8 characters" required></div>
+        <button type="submit" class="form-submit">Create Account</button>
+        <div class="modal-divider">or sign up with</div>
+        <div class="social-login">
+          <button type="button" class="soc-login-btn">🌐 Google</button>
+          <button type="button" class="soc-login-btn">🍎 Apple</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav-overlay" onclick="closeMobileNav()"></div>
+  <div class="mobile-nav-drawer">
+    <div class="nav-logo" style="margin-bottom:1.2rem">LUMI<em style="color:var(--rose-deep);font-style:italic">È</em>RE</div>
+    <a href="#" class="mobile-nav-link">Home</a>
+    <a href="#" class="mobile-nav-link">Women</a>
+    <a href="#" class="mobile-nav-link">Men</a>
+    <a href="#" class="mobile-nav-link">Home & Living</a>
+    <a href="#" class="mobile-nav-link">Accessories</a>
+    <a href="#" class="mobile-nav-link" style="color:var(--rose-deep)">Sale 🎀</a>
+    <button class="btn-primary" style="margin-top:1.5rem;width:100%;text-align:center" onclick="openModal()">Sign In / Register</button>
+  </div>
+</div>
+
+<!-- ANNOUNCE -->
+<div class="announce">🌸 Free shipping on orders over ₹999 <span>✦</span> Use code <strong>LUMIERE20</strong> for 20% off <span>✦</span> New arrivals every Friday 🌸</div>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="#" class="nav-logo">LUMI<em>È</em>RE</a>
+  <ul class="nav-center">
+    <li><a href="#">Women</a></li>
+    <li><a href="#">Men</a></li>
+    <li><a href="#">Home & Living</a></li>
+    <li><a href="#">Accessories</a></li>
+    <li><a href="#" style="color:var(--rose-deep)">Sale ✿</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="nav-icon-btn" onclick="openModal()">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Account
+    </button>
+    <button class="nav-icon-btn">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+      Wishlist
+    </button>
+    <button class="nav-icon-btn">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+      Cart <span class="cart-count" id="cartCount">0</span>
+    </button>
+    <a class="nav-cta" onclick="openModal()">Sign In</a>
+  </div>
+  <button class="mobile-menu-btn" onclick="openMobileNav()"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow reveal">New Collection — Spring 2026</div>
+    <h1 class="hero-title reveal rd1">
+      Dress Up Your<br><em>Everyday</em><br><span class="aw">Moments.</span>
+    </h1>
+    <p class="hero-desc reveal rd2">Pretty pieces, playful styles & curated home finds — for the girl who makes every day feel special. Quality meets cute, always.</p>
+    <div class="hero-btns reveal rd3">
+      <a href="#products" class="btn-primary">Shop Now ✿</a>
+      <a href="#categories" class="btn-secondary">Explore Collections</a>
+    </div>
+    <div class="hero-trust reveal rd4">
+      <div class="trust-item"><div class="trust-num">50K+</div><div class="trust-label">Happy Customers</div></div>
+      <div class="trust-item"><div class="trust-num">4.9★</div><div class="trust-label">Average Rating</div></div>
+      <div class="trust-item"><div class="trust-num">2K+</div><div class="trust-label">Curated Products</div></div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-img-wrap">
+      <img src="https://images.unsplash.com/photo-1502716119720-b23a93e5fe1b?w=900&q=85"
+           alt="Spring fashion collection"
+           onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=80'">
+    </div>
+    <div class="hero-tag-float">New Season ✦</div>
+    <div class="hero-badge-float">
+      <div class="hbf-label">Featured Collection</div>
+      <div class="hbf-value">Spring Essentials 🌸</div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="categories" id="categories">
+  <div class="sec-header reveal">
+    <div>
+      <div class="sec-eyebrow">Shop By Category</div>
+      <h2 class="sec-title">Explore Our <em>Collections</em></h2>
+    </div>
+    <a href="#" class="sec-link">View All Categories →</a>
+  </div>
+  <div class="cat-grid reveal rd1">
+    <div class="cat-card">
+      <div class="cat-card-inner">
+        <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&q=80" alt="Women's Fashion">
+        <div class="cat-overlay"></div>
+        <div class="cat-pill">Shop Now →</div>
+        <div class="cat-body">
+          <div class="cat-name">Women's Fashion</div>
+          <div class="cat-count">420+ Products</div>
+        </div>
+      </div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-card-inner">
+        <img src="https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?w=600&q=80" alt="Men's Style">
+        <div class="cat-overlay"></div>
+        <div class="cat-pill">Shop Now →</div>
+        <div class="cat-body">
+          <div class="cat-name">Men's Style</div>
+          <div class="cat-count">310+ Products</div>
+        </div>
+      </div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-card-inner">
+        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80" alt="Home & Living">
+        <div class="cat-overlay"></div>
+        <div class="cat-pill">Shop Now →</div>
+        <div class="cat-body">
+          <div class="cat-name">Home & Living</div>
+          <div class="cat-count">180+ Products</div>
+        </div>
+      </div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-card-inner">
+        <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80" alt="Accessories">
+        <div class="cat-overlay"></div>
+        <div class="cat-pill">Shop Now →</div>
+        <div class="cat-body">
+          <div class="cat-name">Accessories</div>
+          <div class="cat-count">250+ Products</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED PRODUCTS -->
+<section class="products" id="products">
+  <div class="sec-header reveal">
+    <div>
+      <div class="sec-eyebrow">Hand-Picked For You</div>
+      <h2 class="sec-title">Featured <em>Products</em></h2>
+    </div>
+    <a href="#" class="sec-link">View All Products →</a>
+  </div>
+  <div class="product-grid">
+
+    <div class="product-card reveal rd1">
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1572804013427-4d7ca7268217?w=500&q=80" alt="Floral Midi Dress">
+        <span class="product-badge badge-new">New ✿</span>
+        <div class="product-actions">
+          <button class="pa-btn pa-cart" onclick="addToCart('Floral Midi Dress')">Add to Cart</button>
+          <button class="pa-btn pa-wish">♡</button>
+        </div>
+      </div>
+      <div class="product-stars">★★★★★</div>
+      <div class="product-name">Floral Midi Dress</div>
+      <div class="product-sub">Women's Fashion</div>
+      <div class="product-price"><span class="price-current">₹3,499</span></div>
+    </div>
+
+    <div class="product-card reveal rd2">
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?w=500&q=80" alt="Canvas Tote Bag">
+        <span class="product-badge badge-sale">−25% 🎀</span>
+        <div class="product-actions">
+          <button class="pa-btn pa-cart" onclick="addToCart('Canvas Tote Bag')">Add to Cart</button>
+          <button class="pa-btn pa-wish">♡</button>
+        </div>
+      </div>
+      <div class="product-stars">★★★★<span style="opacity:.3">★</span></div>
+      <div class="product-name">Canvas Tote Bag</div>
+      <div class="product-sub">Accessories</div>
+      <div class="product-price">
+        <span class="price-current">₹1,199</span>
+        <span class="price-old">₹1,599</span>
+        <span class="price-save">Save ₹400</span>
+      </div>
+    </div>
+
+    <div class="product-card reveal rd3">
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=500&q=80" alt="Ceramic Vase Set">
+        <span class="product-badge badge-hot">Trending 🌟</span>
+        <div class="product-actions">
+          <button class="pa-btn pa-cart" onclick="addToCart('Ceramic Vase Set')">Add to Cart</button>
+          <button class="pa-btn pa-wish">♡</button>
+        </div>
+      </div>
+      <div class="product-stars">★★★★★</div>
+      <div class="product-name">Ceramic Vase Set</div>
+      <div class="product-sub">Home & Living</div>
+      <div class="product-price"><span class="price-current">₹2,299</span></div>
+    </div>
+
+    <div class="product-card reveal rd4">
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=500&q=80" alt="Classic Oxford Shirt">
+        <span class="product-badge badge-new">New</span>
+        <div class="product-actions">
+          <button class="pa-btn pa-cart" onclick="addToCart('Classic Oxford Shirt')">Add to Cart</button>
+          <button class="pa-btn pa-wish">♡</button>
+        </div>
+      </div>
+      <div class="product-stars">★★★★<span style="opacity:.3">★</span></div>
+      <div class="product-name">Classic Oxford Shirt</div>
+      <div class="product-sub">Men's Style</div>
+      <div class="product-price">
+        <span class="price-current">₹2,799</span>
+        <span class="price-old">₹3,499</span>
+        <span class="price-save">Save ₹700</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROMO BANNER -->
+<div class="promo" style="padding:0 4rem">
+  <div style="margin:0 auto">
+  <div class="promo-inner">
+    <div class="promo-text">
+      <div class="promo-eyebrow">🌸 Limited Time Offer</div>
+      <h2 class="promo-title">Up to <strong>40% Off</strong><br>Season Clearance</h2>
+      <p class="promo-desc">Don't miss our biggest sale of the season. Premium styles, accessories, and home goods — all at extraordinary prices.</p>
+      <a href="#" class="btn-peach">Shop The Sale 🎀</a>
+    </div>
+    <div class="promo-visual">
+      <div class="promo-pattern"></div>
+      <div class="promo-countdown">
+        <div class="countdown-label">✦ Offer Ends In ✦</div>
+        <div class="countdown-grid">
+          <div class="cd-box"><div class="cd-num" id="cd-h">00</div><div class="cd-unit">Hours</div></div>
+          <div class="cd-box"><div class="cd-num" id="cd-m">00</div><div class="cd-unit">Mins</div></div>
+          <div class="cd-box"><div class="cd-num" id="cd-s">00</div><div class="cd-unit">Secs</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- TRENDING -->
+<section class="trending" id="trending">
+  <div class="sec-header reveal">
+    <div>
+      <div class="sec-eyebrow">What's Hot Right Now</div>
+      <h2 class="sec-title">Trending <em>This Week</em></h2>
+    </div>
+  </div>
+  <div class="trending-grid">
+    <div class="trend-card reveal rd1">
+      <div class="trend-img"><img src="https://images.unsplash.com/photo-1572804013427-4d7ca7268217?w=200&q=80" alt="Floral Wrap Dress"></div>
+      <div><div class="trend-rank">01</div><div class="trend-name">Floral Wrap Dress</div><div class="trend-cat">Women's Fashion</div><div class="trend-price">₹2,999</div></div>
+    </div>
+    <div class="trend-card reveal rd2">
+      <div class="trend-img"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&q=80" alt="Canvas Sneakers"></div>
+      <div><div class="trend-rank">02</div><div class="trend-name">Canvas Sneakers</div><div class="trend-cat">Footwear</div><div class="trend-price">₹1,899</div></div>
+    </div>
+    <div class="trend-card reveal rd3">
+      <div class="trend-img"><img src="https://images.unsplash.com/photo-1602869175093-a88fcf56a0a0?w=200&q=80" alt="Soy Candle Trio"></div>
+      <div><div class="trend-rank">03</div><div class="trend-name">Soy Candle Trio</div><div class="trend-cat">Home & Living</div><div class="trend-price">₹1,299</div></div>
+    </div>
+    <div class="trend-card reveal rd1">
+      <div class="trend-img"><img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=200&q=80" alt="Leather Satchel"></div>
+      <div><div class="trend-rank">04</div><div class="trend-name">Leather Satchel</div><div class="trend-cat">Accessories</div><div class="trend-price">₹4,499</div></div>
+    </div>
+    <div class="trend-card reveal rd2">
+      <div class="trend-img"><img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=200&q=80" alt="Merino Wool Scarf"></div>
+      <div><div class="trend-rank">05</div><div class="trend-name">Merino Wool Scarf</div><div class="trend-cat">Accessories</div><div class="trend-price">₹1,599</div></div>
+    </div>
+    <div class="trend-card reveal rd3">
+      <div class="trend-img"><img src="https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?w=200&q=80" alt="Trench Coat"></div>
+      <div><div class="trend-rank">06</div><div class="trend-name">Trench Coat</div><div class="trend-cat">Men's Style</div><div class="trend-price">₹6,999</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PERKS -->
+<div class="perks">
+  <div class="perks-grid">
+    <div class="perk reveal"><span class="perk-icon">🚚</span><div class="perk-title">Free Shipping</div><div class="perk-desc">On all orders above ₹999 across India</div></div>
+    <div class="perk reveal rd1"><span class="perk-icon">↩️</span><div class="perk-title">Easy Returns</div><div class="perk-desc">30-day hassle-free return policy</div></div>
+    <div class="perk reveal rd2"><span class="perk-icon">🔒</span><div class="perk-title">Secure Payments</div><div class="perk-desc">UPI, cards & wallets — always encrypted</div></div>
+    <div class="perk reveal rd3"><span class="perk-icon">🌿</span><div class="perk-title">Sustainable</div><div class="perk-desc">Ethically sourced, eco-friendly packaging</div></div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="sec-header reveal">
+    <div>
+      <div class="sec-eyebrow">Customer Stories</div>
+      <h2 class="sec-title">What Our <em>Customers Say</em></h2>
+    </div>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card reveal rd1">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"The floral dress I ordered is absolutely gorgeous. The quality is exceptional and it arrived beautifully packaged. Will definitely be a repeat customer!"</p>
+      <div class="testi-author">
+        <div class="testi-avatar">🌸</div>
+        <div><div class="testi-name">Priya Sharma</div><div class="testi-loc">Mumbai, India</div></div>
+      </div>
+    </div>
+    <div class="testi-card reveal rd2">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"Lumière is my go-to for gifts. The curation is impeccable and the customer service is outstanding. Fast delivery and premium quality every time."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">💫</div>
+        <div><div class="testi-name">Arjun Mehta</div><div class="testi-loc">Delhi, India</div></div>
+      </div>
+    </div>
+    <div class="testi-card reveal rd3">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"I love how every piece feels intentional and thoughtful. The home décor collection transformed my living room. Worth every rupee!"</p>
+      <div class="testi-author">
+        <div class="testi-avatar">🌷</div>
+        <div><div class="testi-name">Nisha Reddy</div><div class="testi-loc">Bangalore, India</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<div class="newsletter">
+  <h2 class="newsletter-title reveal">Stay in the <strong>Loop</strong> 🌸</h2>
+  <p class="newsletter-sub reveal">New arrivals, exclusive offers & style inspiration — straight to your inbox.</p>
+  <form class="newsletter-form reveal" onsubmit="handleNewsletter(event)">
+    <input class="newsletter-input" type="email" placeholder="Enter your email address" required>
+    <button type="submit" class="newsletter-btn">Subscribe ✿</button>
+  </form>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <span class="nav-logo">LUMI<em>È</em>RE</span>
+      <p>Curated fashion, home & lifestyle for the modern girl who loves pretty things. Quality, sustainability and timeless cute style.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <ul>
+        <li><a href="#">Women's Fashion</a></li>
+        <li><a href="#">Men's Style</a></li>
+        <li><a href="#">Home & Living</a></li>
+        <li><a href="#">Accessories</a></li>
+        <li><a href="#">Sale 🎀</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Help</h4>
+      <ul>
+        <li><a href="#">Track Order</a></li>
+        <li><a href="#">Returns</a></li>
+        <li><a href="#">Size Guide</a></li>
+        <li><a href="#">FAQs</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Sustainability</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 Lumière. All rights reserved. Made with 🌸</div>
+    <div class="footer-pay">
+      <span class="pay-badge">UPI</span>
+      <span class="pay-badge">VISA</span>
+      <span class="pay-badge">Mastercard</span>
+      <span class="pay-badge">Razorpay</span>
+      <span class="pay-badge">COD</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+let cartCount = 0;
+function addToCart(name) {
+  cartCount++;
+  document.getElementById('cartCount').textContent = cartCount;
+  document.getElementById('toast-msg').textContent = `"${name}" added to cart! 🛍️`;
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+function openModal() { document.getElementById('authModal').classList.add('open'); }
+function closeModal() { document.getElementById('authModal').classList.remove('open'); }
+document.getElementById('authModal').addEventListener('click', e => { if(e.target===e.currentTarget) closeModal(); });
+function switchTab(tab, btn) {
+  document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.modal-form').forEach(f => f.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(tab+'Form').classList.add('active');
+}
+function handleAuth(e, msg) {
+  e.preventDefault(); closeModal();
+  document.getElementById('toast-msg').textContent = msg;
+  const t = document.getElementById('toast'); t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+function handleNewsletter(e) {
+  e.preventDefault();
+  document.getElementById('toast-msg').textContent = '🎉 You\'re subscribed! Check your inbox 🌸';
+  const t = document.getElementById('toast'); t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+  e.target.reset();
+}
+function openMobileNav() { document.getElementById('mobileNav').classList.add('open'); }
+function closeMobileNav() { document.getElementById('mobileNav').classList.remove('open'); }
+
+(function countdown() {
+  const stored = sessionStorage.getItem('cd_end');
+  const target = stored ? new Date(stored) : (() => {
+    const d = new Date(); d.setHours(d.getHours()+11, d.getMinutes()+42, 18);
+    sessionStorage.setItem('cd_end', d.toISOString()); return d;
+  })();
+  function tick() {
+    const diff = target - new Date();
+    if (diff<=0) { ['cd-h','cd-m','cd-s'].forEach(id=>document.getElementById(id).textContent='00'); return; }
+    document.getElementById('cd-h').textContent = String(Math.floor(diff/3600000)).padStart(2,'0');
+    document.getElementById('cd-m').textContent = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+    document.getElementById('cd-s').textContent = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+    setTimeout(tick, 1000);
+  }
+  tick();
+})();
+
+const revEls = document.querySelectorAll('.reveal');
+if ('IntersectionObserver' in window) {
+  revEls.forEach(el => el.classList.add('will-animate'));
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+  revEls.forEach(el => io.observe(el));
+}
+</script>
+</body>
+</html>
